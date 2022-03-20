@@ -1,0 +1,657 @@
+\documentclass{book}%定义文章类型为书籍
+
+\usepackage[heading=true]{ctex}%中文宏包
+\usepackage{fancyhdr}%格式
+\pagestyle{fancy}%格式
+%\fancyfoot[c]{\thepage}%页脚设置
+%\fancyhead[r]{\thetitle}%页眉设置
+\lfoot{}%页眉页脚格式
+%\fancyfoot[RO,RE]{\thepage}%页眉页脚格式
+%\rfoot{}%页眉页脚格式
+%\cfoot{}%偶数页码有问题，隐藏先
+%\fancyfoot[R]{概率论学习笔记}%页脚
+%\fancyhf{}%清除页眉、页脚格式
+\usepackage{changepage}%用来设置整段缩进
+\usepackage{xltxtra}%标志符号
+\usepackage{amsmath}%数学宏包
+\usepackage{amsthm}%定理环境
+\usepackage{graphicx}%图像宏包
+\usepackage{titlesec}%标题格式
+\usepackage{amssymb}%数学宏包
+\usepackage{geometry}%页面设置
+\usepackage{makecell}%表格内换行
+\geometry{centering}%版心居中
+\geometry{top=2cm}%上边缘宽度
+\geometry{bottom=2cm}%下边缘距离
+\geometry{left=2cm}%左边缘距离
+\geometry{right=2cm}%右边缘距离
+
+\newtheorem{thm}{贝叶斯定理}
+\newtheorem{erxiangshi}{二项式定理}
+\newtheorem{duoxiangshi}{多项式定理}
+\newtheorem{demogen}{德摩根律}
+
+\begin{document}
+	
+	\setlength{\parindent}{0pt}%取消首行缩进
+	
+	\begin{titlepage}%自定义标题格式
+		\vspace*{\fill}
+		\begin{center}
+			\normalfont
+			{\huge\bfseries Probability Theory}
+			\bigskip
+			
+			{\Large\itshape 张容康\\2150931}
+		\end{center}
+		\vspace{\stretch{3}}
+	\end{titlepage}
+	\thispagestyle{fancy}
+	
+	\newpage%新页
+	\let\cleardoublepage\clearpage%清除空白页
+	\thispagestyle{empty}%清除目录页码
+	\tableofcontents%输出目录
+	\thispagestyle{empty}%自定义格式
+	
+	
+	\part{写在学前}
+	
+	\chapter{课程安排}
+	
+	\section{上课时间、地点、座位}
+	时间：周一早上一二节、周三早上三四节\\
+	地点：南207（南楼右栋右侧第三间教室）\\
+	座位：靠廊组最后一排，坐内座，占外座\\
+	
+	\section{成绩组成}
+	期末考试60\%，考勤10\%，作业20\%,课堂小测验10\%。\\
+	该课程中线性代数分数占比较大。\\
+	
+	\section{教材、作业}
+	教材：概率论基础教程\\
+	作业：概率论各章作业\\
+	
+	\chapter{资源}
+	
+	\section{GoodNotes}
+	程序员的数学2概率统计\\
+	概率导论\\
+	概率论基础教程\\
+	概率论教程\\
+	概率论与数理统计\\
+	概率与计算\\
+	高等数理统计学\\
+	数理统计学教程\\
+	随机过程导论\\
+	统计学习方法\\
+	应用随机过程概率模型导论\\
+	作业\\
+	Probability and Statistics\\
+	
+	\chapter{指南、问题、错误、日常}
+	
+	\section{指南}
+	概率论的学习需要每天坚持，这不仅是获取新知的途径，也是巩固所学的另一种方式，在此过程中还能加强思维的培养。\\
+	
+	\section{问题}
+	GoodNotes-概率论基础教程-P68-例题4i-帕斯卡“细节非常枯燥”的解法。\\
+	
+	\section{想法}
+	概率论的Python、MATLAB实现。\\
+	
+	\section{日常}
+	2022.3.20开始学习概率论。\\
+	\begin{table}[h]
+		\begin{tabular}{|c|c|}
+			\hline
+			2022.3.20&\makecell[c]{学习概率论基础教程\\做概率论第三章作业\\}\\
+			\hline
+		\end{tabular}
+	\end{table}
+
+    \part{GoodNotes}
+    
+    \chapter{概率论基础教程}
+    
+    \section{组合分析}
+    	
+	\subsection{概念}
+	组合分析（combinational analysis）：有关计数的数学理论。\\
+	计数基本法则:mn\\
+	基本法则的证明：列举法\\
+	推广的计数基本法则：$n_{1}n_{2}\cdots n_{r}$\\
+	排列（permutation）\\
+	0!=1\\
+	对于n个元素，如果$n_{1},n_{2},\cdots,n_{r}$个元素彼此相同，则排列方式一共有$\frac{n!}{{n_{1}} ! {n_{2}} ! \cdots {n_{r}}!}$种。\\
+	从n个元素中取r个元素的组合数为：$\begin{pmatrix}n\\r\end{pmatrix}=\frac{n!}{(n-r)!r!}=\frac{n(n-1)(n-2)\cdots (n-r+1)}{r!}=\frac{n!}{(n-r)!r!}$，称为二项式系数。\\
+	$\begin{pmatrix} n\\0 \end{pmatrix}=\begin{pmatrix} n \\ n \end{pmatrix}=1$\\
+	$\begin{pmatrix} n\\i \end{pmatrix}=0(i<0\text{或}i>n)$\\
+	组合恒等式：$\begin{pmatrix}n\\r\end{pmatrix}=\begin{pmatrix}n-1\\r-1\end{pmatrix}+\begin{pmatrix}n-1\\r\end{pmatrix}$\\
+	\begin{erxiangshi}
+		$\displaystyle (x+y)^{n}=\sum_{k=0}^{n}\begin{pmatrix}n\\k\end{pmatrix}x^ky^{n-k}$
+	\end{erxiangshi}
+	二项式定理的证明：\\
+	（\romannumeral1)数学归纳法（假设n-1时成立，推出n成立）\\
+	$(x+y)^{n}=(x+y)(x+y)^{n-1}=(x+y)\displaystyle{\sum_{k=0}^{n-1}\begin{pmatrix}n-1\\k\end{pmatrix}x^{k}y^{n-k-1}}\text{(归纳假设要用到)}\sum_{k=0}^{n-1}\begin{pmatrix}n-1\\k\end{pmatrix}x^{k+1}y^{n-k-1}+\sum_{k=0}^{n-1}\begin{pmatrix}n-1\\k\end{pmatrix}x^{k}y^{n-k}=\sum_{i=1}^{n}\begin{pmatrix}n-1\\i-1\end{pmatrix}x^{i}y^{n-i}(i=k+1)+\sum_{i=0}^{n-1}\begin{pmatrix}n-1\\i\end{pmatrix}x^{i}y^{n-i}(i=k)=\sum_{i=0}^{n}\begin{pmatrix}n\\i\end{pmatrix}(i=i-1)x^{i}y^{n-i}-\sum_{i=0}^{n}\begin{pmatrix}n-1\\i\end{pmatrix}x^{i}y^{n-i}+\sum_{i=0}^{n-1}\begin{pmatrix}n-1\\i\end{pmatrix}x^{i}y^{n-i}=\sum_{i=0}^{n}\begin{pmatrix}n\\i\end{pmatrix}x^{i}y^{n-i}$（运用组合恒等式）\\
+	(\romannumeral2)组合法\\
+	$(x_{1}+y_{1})(x_{2}+y_{2})\cdots(x_{n}+y_{n})\text{展开式中含}k\text{个}x_{i}\text{和}n-k\text{个}y_{i}\text{的项一共有}\begin{pmatrix}n\\k\end{pmatrix}\text{个}\text{，}$
+	故$\displaystyle{(x+y)^{n}=\sum_{k=0}^{n}\begin{pmatrix}n\\k\end{pmatrix}x^{k}y^{n-k}}$。\\
+	多项式系数(multinominal coefficient)：$\begin{pmatrix}n\\n_{1},n_{2},\cdots,n_{r}\end{pmatrix}=\frac{n!}{n_{1}!n_{2}!\cdots n_{r}!}$\\
+	多项式系数的推导有两种方法：\\
+	(\romannumeral1)依次抽取法\\
+	$\begin{pmatrix}n\\n_{1}\end{pmatrix}\begin{pmatrix}n-n_{1}\\n_{2}\end{pmatrix}\cdots \begin{pmatrix}n-n_{1}-\cdots -n_{r-1}\\n_{r}\end{pmatrix}$\\
+	(\romannumeral2)排列组合法\\
+	n个元素分为r组，每组中的元素相同，即元素的可能取值有r个，每个取值对应的元素个数依次为$n_{1},n_{2},\cdots ,n_{r}$。所有元素任意排列排列数为n！，考虑排除同组内的排列数，得到组合数为$\frac{n!}{n_{1}!n_{2}\cdots n_{r}!}$。(概率论基础教程中对此推导方法的表述欠佳)\\
+	\begin{duoxiangshi}
+		$\displaystyle (x_{1}+x_{2}+\cdots +x_{r})^{n}=\sum_{\substack{n_{1},n_{2},\cdots,n_{r}\\n_{1}+n_{2}+\cdots +n_{r}=n}}\begin{pmatrix}n\\n_{1},n_{2},\cdots ,n_{r}\end{pmatrix}x_{1}^{n_{1}}x_{2}^{n_{2}}\cdots x_{r}^{n_{r}}$（对所有满足$n_{1}+n_{2}+\cdots +n_{r}=n$的非负整数向量（$n_{1},n_{2},\cdots ,n_{r}$)求和）\\
+		频率：$P(A)=\sum\limits_{j=1}^{n}P(B_{j})P(A|B_{j})$(关键是条件划分和分情况讨论）
+	\end{duoxiangshi}
+	方程整数解的个数:\\
+	(\romannumeral1)正整数解(向量)的个数：$\begin{pmatrix}n-1\\r-1\end{pmatrix}$\\
+	(\romannumeral2)非负整数解的个数：$\begin{pmatrix}n+r-1\\r-1\end{pmatrix}$\\
+	$(x_{1}+x_{2}+\cdots x_{r})^n=\sum\begin{pmatrix}n\\n_{1},n_{2},\cdots ,n_{r}\end{pmatrix}x_{1}^{n_{1}}x_{2}^{n_{2}}\cdots x_{r}^{n_{r}}$的展开项一共有$\begin{pmatrix}n+r-1\\r-1\end{pmatrix}$项。\\
+	\begin{thm}
+	$P(B_{i}|A)=\frac{P(A|B_{i})P(B_{i})}{\sum_{j=1}^{n}P(A|B_{j})P(B_{j})}$
+    \end{thm}
+    其中，A是后验概率，B是先验概率，其描述了在先验概率已知的情况下，后验概率对先验概率的修正。\\
+    应用：推荐算法，如通过用户的点击改变搜索引擎的排序。\\
+    趣味拓展：Monty Hall problem\\
+    \begin{demogen}
+    	交事件的补等于补事件的并；并事件的补等于补事件的交。\\
+    \end{demogen}
+    在理清事件逻辑关系的前提下，运用德摩根律可有效简化运算，如求某事件的反面，即求其补，代入德摩根律可将其转换为交并补运算。\\
+	空事件发生的概率是0。\\
+	并事件的概率等于概率的和。\\
+	
+	\subsection{习题}
+	(概率论基础教程P5例4b)\\
+	$\begin{pmatrix}5\\2\end{pmatrix}(\begin{pmatrix}7\\3\end{pmatrix}-\begin{pmatrix}5\\1\end{pmatrix})$\\
+	~\\
+	
+	(概率论基础教程P5例4c)\\
+	$\begin{pmatrix}n-m+1\\m\end{pmatrix}$\\
+	~\\
+	
+	(概率论基础教程P7例4e)\\
+	$\displaystyle{\sum_{k=0}^{n}\begin{pmatrix}n\\k\end{pmatrix}1^{k}1^{n-k}=(1+1)^{n}=2^n}$（运用二项式定理）\\
+	~\\
+	
+	(概率论基础教程P9例5d)\\
+	(a)$\begin{pmatrix}8\\4\end{pmatrix}$(挑出4位胜者/挑出胜者组)4!(选择你的败手)=$2^{4}\text{（比赛结果）}\begin{pmatrix}8\\2,2,2,2\end{pmatrix}\text{（选出四组）}/4!\text{（排除组序）}$\\
+	(b)$n=2^{m},n!$\\
+	~\\
+	
+	(概率论基础教程P11例6d)\\
+	(\romannumeral1)失效天线不相邻\\
+	排好失效天线，在失效天线之间放置有效天线$x_{i}$为第i-1个和第i个天线之间有效天线的数目，每两个失效天线之间至少有一个有效天线，$x_{1}+x_{2}+\cdots x_{m+1}=n-m$，即$y_{1}+y_{2}+\cdots y_{m+1}=n-m+2$的正整数解个数$\begin{pmatrix}n-m+1(n-m+2-1)\\m(m+1-1)\end{pmatrix}$。\\
+	(\romannumeral2)每两个失效天线之间至少有2个有效天线\\
+	注：求满足方程的向量解之前需要定义新变量以确保方程中的每个元素大于零，即组中的元素个数大于零（不可等于零）。\\
+	$y_{1}+y_{2}+\cdots +y_{m+1}=n-m-(m-2+1)+2=n-2m+3$正整数向量解个数$\begin{pmatrix}n-2m+2(n-2m+3-1)\\m(m+1-1)\end{pmatrix}$即为所求。	
+	
+	\section{概率论公理}
+	
+	\subsection{概念}
+	样本空间S（sample space）：试验所有可能的结果集合。\\
+	事件（event）：样本空间的任一子集，即某些试验结果的集合。\\
+	事件的并（union）：$\cup$\\
+	事件的交（interaction）：$\cap$\\
+	事件的补：$E^{c}$\\
+	互不相容的事件：$EF=\varnothing$\\
+	集合的运算满足交换律、结合律、分配律，如$(E\cup F)G=EG\cap FG,EF\cup G=(E\cup G)(F\cup G)$。\\
+	$A-B=A\cap B^{c}=A-AB$\\
+	德摩根律：$\displaystyle ({\mathop{\cup}\limits_{i=1}^{n}}E_{i})^c=\mathop{\cap}\limits_{i=1}^{n}E^{c}_{i},\mathop{\cup}\limits_{i=1}^{n}E^{c}_{i}=(\mathop{\cap}\limits_{i=1}^{n}E_{i})^{c}$(简记为“并的补等于补的交，补的并等于交的补”)\\
+	（证明：设任意元素x属于集合，分别左向右、右向左自然导出）\\
+	(将原集合改为其补集即可推导出公式的另一半，原理是补集的补集为原集合)\\
+	概率的三个公理：范围、归一化、求和。\\
+	公理3：$P(\mathop{\cup}\limits_{i=1}^{n}E_{i})=\sum\limits_{i=1}^{n}P(E_{i})$，其中$E_{i}$为互不相容的事件，n为$\infty$时，只需使i>n的$E_{i}$为空事件即可得到该公理。\\
+	几个简单的命题及其证明\\
+	P(E+F)=P(E)+P(F)-P(EF)\\
+	\begin{proof}
+		$P(E+F)=P(E)+P(E^{c}F),P(E^{c}F)=P(F)-P(EF)$
+	\end{proof}
+	容斥恒等式(inclusion-exclusion identity):\\
+	$P(E_{1}\cup E_{2}\cup \cdots E_{n})=\sum\limits_{i=1}^{n}P(E_{i})-\sum\limits_{i_{1}<i_{2}}P(E_{i_{1}}E_{i_{2}})+\cdots +(-1)^{r+1}\sum\limits_{i_{1}<i_{2}<\cdots <i_{r}}P(E_{i_{1}}E_{i_{2}}\cdots E_{i_{r}})+\cdots +(-1)^{n+1}P(E_{1}E_{2}\cdots E_{n})$，其中$\sum\limits_{i_{1}<i_{2}<\cdots <i_{r}}P(E_{i_{1}}E_{i_{2}}\cdots E_{i_{r}})$的求和项数一共有$\begin{pmatrix}n\\r\end{pmatrix}$项。\\
+	容斥恒等式的几点说明:\\
+	(\romannumeral1)由容斥恒等式导出二项式定理：\\某结果包含在事件$\mathop{\cup}\limits_{i}E_{i}$中，该事件的概率应只被计算一次，容斥恒等式右侧式子中，该结果的概率被计算了$\begin{pmatrix}m\\1\end{pmatrix}-\begin{pmatrix}m\\2\end{pmatrix}+\begin{pmatrix}m\\3\end{pmatrix}-\cdots \pm\begin{pmatrix}m\\m\end{pmatrix}=\sum\limits_{i=0}^{m}(-1)^{i}-\begin{pmatrix}m\\0\end{pmatrix}=1$次,又$\begin{pmatrix}m\\0\end{pmatrix}=1$,故$\sum\limits_{i=0}^{m}\begin{pmatrix}m\\i\end{pmatrix}=\sum\limits_{i=0}^{m}\begin{pmatrix}m\\i\end{pmatrix}(-1)^{i}(1)^{m-i}=(-1+1)^m=0$，即得到二项式定理	$\displaystyle (x+y)^{n}=\sum_{i=0}^{n}\begin{pmatrix}n\\i\end{pmatrix}x^iy^{n-i}$。\\
+	(\romannumeral2)容斥恒等式简明写法：\\
+	$P(\mathop{\cup}\limits_{i=1}^{n}E_{i})=\sum\limits_{r=1}^{n}(-1)^{r+1}\sum\limits_{i_{1}<i_{2}<\cdots <i_{r}}P(E_{i_{1}}\cdots E_{i_{r}})$\\
+	(\romannumeral3)容斥恒等式的上下界与不等式：\\
+	容斥恒等式右侧取到奇数项得到上界，取到偶数项得到下界，即：\\
+	$P(\mathop\cup \limits_{i=1}^{n}E_{i})$\\
+	$\leq \sum\limits_{i=1}^{n}P(E_{i})$
+	$P(\mathop\cup\limits_{i=1}^{n})\geq \sum\limits_{i=1}^{n}P(E_{i})-\sum\limits_{i=1}P(E_{i}E_{j})$\\
+	$P(\mathop\cup\limits_{i=1}^{n}E_{i})\leq \sum\limits_{i=1}^{n}P(E_{i})-\sum\limits_{j<i}P(E_{i}E_{j})+\sum\limits_{k<j<i}P(E_{i}E_{j}E_{k})$\\
+	该定理证明较繁琐（详见概率论基础教程P27），重点步骤如下：\\
+	$\mathop\sum\limits_{i=1}^{n}P(E_{i})=E_{1}\cup (E_{1}^{c}E_{2})\cdots \cup ( {E_{1}}^{c}\cdots E_{n-1}^{c}E_{n})$\\
+	$P(\mathop\cup\limits_{i=1}^{n}E_{i})=P(E_{1})+\sum\limits_{i=2}^{n}P(E_{1}^{c}E_{2}^{c}\cdots E_{i-1}^{c}E_{i})=\sum\limits_{i}P(E_{i})-\sum\limits_{j<i}P(\mathop\cup\limits_{j<i}E_{i}E_{j})$\\
+	由概率的非负性可得到第一个不等式。\\
+	利用并事件的概率等于概率的和、补的交等于并的补，固定i，迭代即可得到下一个不等式。\\
+	Stirling公式：$n!\approx \sqrt{2}\pi n^{n+\frac{1}{2}}e^{-n}$\\
+	连续集函数的概率：若事件序列是递增序列，则$P(\mathop\cup\limits_{i=1}^{\infty}E_{i})=\displaystyle\lim\limits_{n \to \infty}P(E_{n})$,递减序列与之类似，将并改为交即可。\\
+	对于递增/递减事件序列，其并/交事件的概率等于极限的概率，即递增/递减事件序列的极限概率可用并/交事件的概率来计算。\\
+	布尔不等式：并事件的概率不小于子事件概率的和。\\
+	概率是人们对自己说法确信程度的一种度量，亦称为主观概率。\\
+	
+	\subsection{习题}
+	(概率论基础教程P31例5i)\\
+	(a)$P(\mathop\cup\limits_{i=1}^{4}E_{i})=\frac{4}{\begin{pmatrix}52\\13\end{pmatrix}}$\\
+	(b)四张A单独考虑，其余48张牌均分为4组。\\
+	$4!\begin{pmatrix}48\\12,12,12,12\end{pmatrix}$
+	~\\
+	
+	(概率论基础教程例5k)\\
+	(\romannumeral1)没有进攻防守组：\\
+	先分组，再排除顺序。\\
+	40人分为20组，有$\begin{pmatrix}40\\2,2,\cdots ,2\end{pmatrix}$种分组方法，再排除组间顺序(20)！。\\
+	同组中不可同时出现进攻防守组成员，则在进攻防守两大组内分组，方法有${(\frac{\begin{pmatrix}20\\2,2\cdots ,2\end{pmatrix}}{(10)!})}^{2}$种，两分组方法数相除即得到概率。\\
+	(\romannumeral2)有2i对进攻防守组：\\
+	关键是求出总的情况数和满足题目要求的情况数。\\
+	进防组(先选出2i人，2i人之间再进行配对)：$(\begin{pmatrix}20\\2i\end{pmatrix}^{2}!(2i)$\\
+	其他：先分组：$\begin{pmatrix}20-2i\\2,2,\cdots ,2\end{pmatrix}$,再排除组内顺序。\\
+	故概率为:$
+	\frac{
+	{\begin{pmatrix}20\\2i\end{pmatrix}}^{2}(2i)!
+	{\begin{bmatrix}
+		\frac
+		{(20-2i)!}
+		{2^{10-i}(10-i)!}
+	\end{bmatrix}}^{2}}
+    {\frac{(40)!}{2^{20}(20)!}
+    }$
+    ~\\
+    
+    (概率论基础教程P33例5i)\\
+    相交并集的概率计算使用容斥恒等式。\\
+    ~\\
+    
+    (概率论基础教程P34例5m)
+    教材解法：\\
+    假设n人拿到了自己的帽子，考虑互斥事件，即至少一人拿到自己的帽子的概率$P(\mathop \cup \limits_{i=1}^{n}E_{i})$，利用容斥恒等式。
+    $\sum\limits_{i_{i}<i_{2}<\cdots <i_{n}}P(E_{1}E_{2}\cdots E_{n})=\begin{pmatrix}
+    	N\\n
+    \end{pmatrix}\frac{(N-n)!}{N!}$\\
+    原因是n个人必须选到自己的帽子，即只有一个选择，总的排列数为N！，剩下的排列数为（N-n）！。\\
+    臭名昭著的配对问题，男士捡帽子。\\
+    用合适的字母和下标表示有用的事件。\\
+    在向量空间中考虑，每种结果对应n维向量空间中的一个点，一个集合对应一个坐标确定时的空间系，两个集合的交集对应两个坐标确定时的空间系，\dots
+    排列的不同也可想象为空间维度选取顺序的不同，但最终都将确定到需要的空间系，即要求的维度已知，未要求的维度自由。\\
+    即把样本空间具象化为向量空间。\\
+    拿到自己的帽子，则对维度选取的顺序有要求。\\
+    $\sum\limits_{i_{1}<i_{2}<\cdots <i_{n}}P(E_{i_{1}}E_{i_{2}}\cdots E_{i_{n}})=\begin{pmatrix}
+    	N\\n
+    \end{pmatrix}\frac{(N-n)!}{N!}$,$E_{i{j}}$表示第j个人拿到了自己的帽子。\\
+    再代入容斥恒等式，考虑补事件。\\
+    $\frac{\sum\limits_{i=0}{N}(-1)^{i}}{i!}=e^{-1}$即为没有一个人拿到自己帽子的概率。(泰勒展开式)\\
+    维恩图其实是对向量空间的形象缩小化。\\
+    $E_{i}$中i表示选到自己帽子的人数。\\
+    维恩图和向量空间：我认为维恩图只是对向量空间的二维简化，在维恩图中可以想象只考虑两个集合的容斥恒等式，同样可以在向量空间中想象更高维度的容斥恒等式。每增加一个维度，都是对空间的延展，在维恩图中，每增加一个集合，集合的重叠处（集合的交集），相当于同时知道两个维度坐标的空间系。\\
+    将样本空间的每每个最终结果考虑为N维向量空间中一个确定的点（N为男士总数）。\\
+    第i个维度下的坐标表示第i位男士拿到的帽子编号。编号不能重复，在二维中排除某些点，三维中排除由这些点延展出的平行于轴的面，$\dots$ ,n维中排除n-1维，N维自由度为N！，样本空间总的结果数为N！-（N-1）！+$\cdots$ ,$\pm$1。\\
+     没有男士拿到自己的帽子这一事件，要排除向量空间中1，2，\dots ,N个人拿到自己帽子的情况。想象在三维坐标系中，如果已知两人拿到了自己的帽子，即已知某两个坐标轴上的坐标，这样的情况下就确定了一条平行于坐标轴的直线;已知某一个坐标，则确定了一个平面;已知三个坐标，就确定了一个点，平面与直线交于点，重复计算，需要减去。除了点、直线和平面之外的每一个点，都是满足三个人中没有一个人拿到自己帽子的情况。到这里我想到了高中学的几何概率模型，N维空间第N维的长度为N-1，即自由度为N-1，N维空间第N维有N！种结果，则样本空间中满足要求的结果数为$N！-（N-1）！+\cdots$，再除以结果总数N！,即得到所求的概率。这种情况下不需要考虑从N中选n，且有几何上的直观感。由于男士拿到的帽子编号不能重复。\\
+    $E_{i_{j}}$表示事件“第j位男士抽取到自己的帽子”，n表示抽取到自己帽子的男士的总数。n在N内的不同位置顺序和不同取值将最终确定各维度的空间系，在该空间系中，剩下的N-n个维度坐标自由选取。\\
+    ~\\
+    
+    （概率论基础教程P34例5n）\\
+    $E_{i}$表示第i对夫妇坐在一起，$1-P(\mathop\cup\limits_{i=1}^{10}E_{i})$,$P(E_{i_{1}}E_{i_{2}}\cdots E_{i{n}})=\frac{2^{n}(19-n)!}{(19)!}$,将夫妇看为一个整体，则需要考虑19-n的排列，再在夫妇内考虑排序。\\
+    ~\\
+    
+    (概率论基础教程P35例5o)
+    臭名昭著的游程问题\\
+    m次赢，n次输，总的排列次序$\frac{(m+n)!}{n!m!}=\begin{pmatrix}
+    	m+n\\m
+    \end{pmatrix},$$y_{i}$为输的次数，需要使得$y_{i}>0$,得到需要满足的方程右侧为m+2，由方程正整数解的个数得到具有r个游程的输的序列个数为$\begin{pmatrix}m+1\\r\end{pmatrix}$,乘以x满足的方程的正整数解个数$\begin{pmatrix}n-1\\r-1\end{pmatrix}$,得到输赢序列个数。\\
+    先计算总的排列数，再分别计算为满足具有r个游程，输的次数和赢的次数各自的序列数目，相除即得到概率。\\
+    
+    \section{条件概率和独立性}
+    
+    \subsection{概念}
+    F常为假设条件，作为总的样本空间。\\
+    $P(EF)=P(E|F)P(F)$\\
+    乘法规则：$P(E_{1}E_{2}\cdots E_{n})=P(E_{1})P(E_{2}|E_{2})\cdots P(E_{n}|E_{1}E_{2}\cdots E_{n-1})$\\
+    优势比：在同意条件下某事件发生与不发生的概率之比。\\
+    全概率：整个样本空间由某些互斥事件组成，$\sum_{i=1}^{n}F_{i}=S$，则某事件$E_{i}$在该样本空间发生的概率计算方式为：对该事件在各子事件发生的条件下的条件概率的加权求和。\\
+    贝叶斯公式所求为在已知某试验结果的条件下的更新概率。\\
+    互不相容事件交的概率等于概率的乘积，并的概率等于概率的和。\\
+    贝叶斯公式的应用情景是重置试验，所求为重置概率。\\
+    子集的概率小于超集。\\
+    独立事件的严格定义。\\
+    
+    \subsection{习题}
+    （概率论基础教程P56例2a）\\
+    $P(R|L^{c})=\frac{P(RL^{c})}{P(L^{c})}=\frac{2}{3}\\$\\
+    ~\\
+    
+    (概率论基础教程P57例2c)\\
+    $\frac{\begin{pmatrix}
+    	5\\3
+    \end{pmatrix}\begin{pmatrix}
+    21\\10
+    \end{pmatrix}}{\begin{pmatrix}
+    26\\13
+	\end{pmatrix}}$\\
+	52张牌中26张属于南和北，剩下的26张在东和西之间分配，故总的情况数为$\begin{pmatrix}
+	26\\13
+	\end{pmatrix}$。\\
+	~\\
+
+	(概率论基础教程P58例2e)\\
+	(a)$P(R_{1}R_{2})=P(R_{1}|R_{2})P(R_{2})=(\frac{2}{3})(\frac{7}{11})=\frac{\begin{pmatrix}
+		8\\2
+	\end{pmatrix}}{\begin{pmatrix}
+	12\\2
+	\end{pmatrix}}$\\
+	第一次抽中红球的概率乘以在此条件下第二次也抽中红球的条件概率。\\
+	(b)$P(R_{1})=P(\mathop\cup\limits_{i=1}^{8}B_{i})=\sum\limits_{i=1}^{8}P(B_{i})={8}{\frac{r}{8r+4w}}$\\
+	$P(R_{2}|R_{1})=\frac{7r}{7r+4w}$\\
+	$P(R_{1}R_{2})=P(R_{1})P(R_{2}|R_{1})$\\
+	~\\
+
+
+	（概率论基础教程P60例2f）\\
+	又是臭名昭著的配对问题，k个人拿到自己的帽子，剩下的N-k个人没拿到自己的帽子，概率为$\sum\limits_{i=0}^{n-k}(-1)^{i}/i!\approx e^{-1}$，前k个人拿到自己的帽子的概率为$\frac{(N-k)!}{N!}$，两者相乘即得到所求结果。\\
+	记事件E为有k个人拿到了自己的帽子，记G为剩下的N-k个人没拿到自己的帽子，由条件概率可知$P(EG)=P(G|E)P(E)$，由乘法原则可以得到结果。\\
+
+	\part{作业}
+
+	\chapter{第一章}
+
+	{\bfseries 1.8}\\
+	区分字母的大小写，则排列数如下：\\
+	(a)$5!=120$\\
+	(b)$\frac{7!}{2!}=2520$\\
+	(c)$\frac{11!}{4!\times 4!\times 2!}=34650$\\
+	(d)$\frac{7!}{2!}=2520$\\
+	~\\
+	
+	{\bfseries 1.10}\\
+	排列数如下：\\
+	(a)$8!=40320$\\
+	(b)$7!\times 2!=10080$\\
+	(c)$2!\times 4!\times 4!=1152$\\
+	(d)$5!\times 4!=2880$\\
+	(e)$4!\times 2^{4}=384$\\
+	~\\
+	
+	{\bfseries 1.15}\\
+	思路：分别选出再配对。\\
+	$\begin{pmatrix}
+		10\\5
+	\end{pmatrix}\begin{pmatrix}
+		12\\5
+	\end{pmatrix}5!=23950080$ \\ 
+	~\\
+	
+	{\bfseries 1.19}\\
+	(a)$\begin{pmatrix}
+		2\\1
+	\end{pmatrix}\begin{pmatrix}
+		4\\2
+	\end{pmatrix}\begin{pmatrix}
+		8\\3
+	\end{pmatrix}=672$\\
+	(b)$\begin{pmatrix}
+		2\\1
+	\end{pmatrix}\begin{pmatrix}
+		6\\2
+	\end{pmatrix}\begin{pmatrix}
+		6\\3
+	\end{pmatrix}=600$\\
+	(c)$\begin{pmatrix}
+		5\\2
+	\end{pmatrix}\begin{pmatrix}
+		7\\3
+	\end{pmatrix}(\text{男的去})+\begin{pmatrix}
+		7\\2
+	\end{pmatrix}\begin{pmatrix}
+		5\\3
+	\end{pmatrix}(\text{女的去})=350+210=560$\\
+	~\\
+	
+	{\bfseries 1.21}\\
+	前提：路径最短。\\
+	$\frac{7!}{4!\times 3!}$\\
+	~\\
+	
+	{\bfseries 1.22}\\
+	先向右移动两步，向上移动两步；再向右移动两步，向上移动一步。\\
+	$\frac{4!}{2!\times 2!}\times \frac{3!}{2!}=18$\\
+	~\\
+	
+	{\bfseries 1.30}\\
+	$7!\times 2!\times \begin{pmatrix}
+		8\\2
+	\end{pmatrix}\times 2!=564480$\\
+	~\\
+	
+	{\bfseries 1.5}\\
+	k为一常数，$\sum_{i=1}^{n}x_{i}\ge k$，则原事件至少有k个1，至多有n-k个0，这k个1和n-k个0的排列数为$\frac{n!}{k!(n-k)!}$\\
+	故总的向量个数为$\sum\limits_{i=k}^{n}\frac{n!}{i!(n-i)!}$\\
+	~\\
+	
+	{\bfseries 1.11}\\
+	已知一含有n个元素的集合，元素的编号依次为1,2,\dots ,n，其中，编号数字最大的元素编号为i，则$i\ge k$，即编号为i的数一定被取到，则剩下的k-1个元素需要从编号为1,2,\dots ,i-1的共i-1个元素中抽取，组合数为$\begin{pmatrix}
+		i-1\\k-1
+	\end{pmatrix}$，故总的组合数为$\sum\limits_{i=k}^{n}\begin{pmatrix}
+		i-1\\k-1
+	\end{pmatrix}(n\ge k)$，
+	即证得$\begin{pmatrix}
+		n\\k
+	\end{pmatrix}=\sum\limits_{i=k}^{n}\begin{pmatrix}
+		i-1\\k-1
+	\end{pmatrix}\quad n\ge k$。\\
+	~\\
+	
+	\chapter{第二章}
+	
+	{\bfseries 2.12}\\
+	记事件学生参加西班牙语班、法语班、德语班依次为为$E_{i},E_{j},E_{k}$。\\
+	由容斥恒等式可得，至少参加一个语言班的学生数为$E_{i}+E_{j}+E_{k}-E_{i}E_{j}-E_{i}E_{k}-E_{j}E_{k}+E_{i}E_{j}E_{k}=50$人。\\
+	(a)由上式所得结果可知，概率为1-0.5=0.5。\\
+	(b)$28+26+16-12\times 2-4\times 2-6\times 2+2\times 3=32$，故概率为0.32。\\
+	(c)$\frac{\begin{pmatrix}
+			50\\1
+		\end{pmatrix}\begin{pmatrix}
+			50\\1
+		\end{pmatrix}+\begin{pmatrix}
+			50\\2
+	\end{pmatrix}}{\begin{pmatrix}
+			100\\2
+	\end{pmatrix}}=1-\frac{\begin{pmatrix}
+	50\\2
+	\end{pmatrix}}{\begin{pmatrix}
+	100\\2
+	\end{pmatrix}}=\frac{149}{198}$\\
+	~\\
+	
+	{\bfseries 2.15}\\
+	(a)$\frac{\begin{pmatrix}
+			4\\1
+		\end{pmatrix}\begin{pmatrix}
+			13\\5
+	\end{pmatrix}}{\begin{pmatrix}
+			52\\5
+	\end{pmatrix}}=\frac{33}{1660}$\\
+	(b)
+	若相同是指图形相同。\\
+	$\frac{\begin{pmatrix}
+			13\\4
+		\end{pmatrix}\begin{pmatrix}
+			4\\1
+		\end{pmatrix}\begin{pmatrix}
+			4\\2
+		\end{pmatrix}4^{3}}{\begin{pmatrix}
+			52\\5
+	\end{pmatrix}}=\frac{352}{833}$\\
+	(c)$\frac{\begin{pmatrix}
+			13\\3
+		\end{pmatrix}\begin{pmatrix}
+			3\\2
+		\end{pmatrix}{\begin{pmatrix}
+				4\\2
+		\end{pmatrix}}^{2}\begin{pmatrix}
+			4\\1
+	\end{pmatrix}}{\begin{pmatrix}
+			52\\5
+	\end{pmatrix}}=\frac{198}{4165}$\\
+	(d)$\frac{\begin{pmatrix}
+			13\\3
+		\end{pmatrix}\begin{pmatrix}
+			3\\1
+		\end{pmatrix}\begin{pmatrix}
+			4\\3
+		\end{pmatrix}{\begin{pmatrix}
+				4\\1
+		\end{pmatrix}}^{2}}{\begin{pmatrix}
+			52\\5
+	\end{pmatrix}}=\frac{88}{4165}$\\
+	(e)$\frac{\begin{pmatrix}
+			13\\2
+		\end{pmatrix}\begin{pmatrix}
+			2\\1
+		\end{pmatrix}\begin{pmatrix}
+			4\\1
+	\end{pmatrix}}{\begin{pmatrix}
+			52\\5
+	\end{pmatrix}}=\frac{1}{4165}$\\
+	~\\
+	
+	{\bfseries 2.17}\\
+	$\frac{8!}{\begin{pmatrix}
+			64\\8
+	\end{pmatrix}}=\frac{560}{61474519}$\\
+	~\\
+	
+	{\bfseries 2.19}\\
+	记第一枚色子投掷结果为$A_{i}$，第二枚色子与第一枚色子投掷结果相同记作B。\\
+	$P(AB_{i})=\sum P(B|A_{i})P(A_{i})=({\frac{1}{3}})^{2}+({\frac{1}{3}})^{2}+({\frac{1}{6}})^{2}+({\frac{1}{6}})^{2}=\frac{5}{18}$\\
+	~\\
+	
+	{\bfseries 2.20}\\
+	事件我分到黑杰克记作A，庄家分到黑杰克记作B，则都分不到黑杰克为$A^{c}B^{c}$，由德摩根律可知，补事件的交等于并事件的补，则所求事件等价于至少一人分到黑杰克的补事件。\\
+	$P(A^{c}B^{c})=1-P(AB^{c})-P(A^{c}B)-P(AB)$\\
+	~\\
+	
+	{\bfseries 2.23}\\
+	设第一枚色子的点数为i，i=1，2，\dots ,6,第二枚色子的点数为i+1，\dots ,6,设第二枚色子的点数为k。\\
+	设第一枚色子投掷结果的事件为$A_{i}$，第二枚色子点数大于第一枚色子的事件为B。\\
+	$P(BA_{i})=\sum\limits_{i=1}^{6}\sum\limits_{k=i+1}^{6}P(B|A_{i})P(A_{i})=
+	\frac{1}{6}(\frac{5}{6}+\frac{4}{6}+\frac{3}{6}+\frac{2}{6}+\frac{1}{6})=\frac{5}{12}$\\
+	~\\
+	
+	{\bfseries 2.28}\\
+	(a)$\frac{\begin{pmatrix}
+			5\\3
+		\end{pmatrix}+\begin{pmatrix}
+			6\\3
+		\end{pmatrix}+\begin{pmatrix}
+			8\\3
+	\end{pmatrix}}{\begin{pmatrix}
+			19\\3
+	\end{pmatrix}}=\frac{86}{969}$\\
+	(b)$\frac{\begin{pmatrix}
+			5\\1
+		\end{pmatrix}\begin{pmatrix}
+			6\\1
+		\end{pmatrix}\begin{pmatrix}
+			8\\1
+	\end{pmatrix}}{\begin{pmatrix}
+			19\\3
+	\end{pmatrix}}=\frac{80}{323}$\\
+	有放回取样：\\
+	(a)${(\frac{5}{19}})^{3}+({\frac{6}{19}})^{3}+({\frac{8}{19}})^{3}=\frac{853}{6859}$\\
+	(b)$\frac{5}{19}\times (\frac{6}{18}\times \frac{8}{17}+\frac{8}{18}\times \frac{6}{17})+\frac{6}{19}\times (\frac{5}{18}\times \frac{8}{17}+\frac{8}{18}\times \frac{5}{17})+\frac{8}{19}\times (\frac{6}{18}\times \frac{5}{17}+\frac{5}{18}\times \frac{6}{17})=\frac{80}{323}$
+	\\
+	~\\
+	
+	{\bfseries 2.30}\\
+	(a)$\frac{\begin{pmatrix}
+			7\\3
+		\end{pmatrix}\begin{pmatrix}
+			8\\3
+		\end{pmatrix}3!}{\begin{pmatrix}
+			8\\4
+		\end{pmatrix}\begin{pmatrix}
+			9\\4
+		\end{pmatrix}4!}=\frac{1}{18}$\\
+	(b)$\frac{\begin{pmatrix}
+			7\\3
+		\end{pmatrix}\begin{pmatrix}
+			8\\3
+		\end{pmatrix}\begin{pmatrix}
+			3\\1
+		\end{pmatrix}3!}{\begin{pmatrix}
+			8\\4
+		\end{pmatrix}\begin{pmatrix}
+			9\\4
+		\end{pmatrix}4!}=\frac{1}{6}$\\
+	(c)$\frac{\begin{pmatrix}
+			7\\3
+		\end{pmatrix}\begin{pmatrix}
+			8\\4
+		\end{pmatrix}+\begin{pmatrix}
+			7\\4
+		\end{pmatrix}\begin{pmatrix}
+			8\\3
+	\end{pmatrix}}{\begin{pmatrix}
+			8\\4
+		\end{pmatrix}\begin{pmatrix}
+			9\\4
+	\end{pmatrix}}=\frac{1}{2}$\\
+	~\\
+	
+	{\bfseries 2.32}\\
+	从g个女孩中选中一人，剩下的b+g-1个人任意排列，即为满足要求的情况数。\\
+	$\frac{\begin{pmatrix}
+			g\\1
+		\end{pmatrix}(b+g-1)!}{(b+g)!}=\frac{g}{b+g}$\\
+	~\\
+	
+	{\bfseries 2.45}\\
+	(a)$\frac{\begin{pmatrix}
+			n-1\\k-1
+		\end{pmatrix}(k-1)!}{n!}=\frac{(n-1)!}{(n-k)!}$\\
+	(b)$(\frac{n-1}{n})^{k}\frac{1}{n}$\\
+	~\\
+	
+	{\bfseries 2.56}\\
+	计算B赢的概率即可。\\
+	前提：A在三个滚轮之间随机选择。\\
+	A得到某个数字的概率为$\frac{1}{9}$，B得到某个数字的概率是$\frac{1}{6}$。\\
+	$P(B)=\frac{1}{9}(1+\frac{5}{6}+\frac{2}{3}+\frac{2}{3}+\frac{1}{2}+\frac{1}{3}+\frac{1}{3}+\frac{1}{6})=\frac{1}{2}$\\
+	故A和B赢的概率相等。
+	~\\
+	
+	{\bfseries 2.6}\\
+	(a)$EF^{c}G^{c}$\\
+	(b)$EF^{c}G$\\
+	(c)$U-E^{c}F^{c}G^{c}$，U表示所有事件的和。\\
+	(d)$EFG+E^{c}FG+EF^{c}G+EFG^{c}$\\
+	(e)$EFG$\\
+	(f)$E^{c}F^{c}G^{c}$\\
+	(g)$E^{c}F^{c}G^{c}+EF^{c}G^{c}+E^{c}FG^{c}+E^{c}F^{c}G$\\
+	(h)$U-EFG$\\
+	(i)$EFG^{c}+E^{c}FG+EF^{c}G$\\
+	(j)$E^{c}F^{c}G^{c}+EF^{c}G^{c}+E^{c}FG^{c}+E^{c}F^{c}G+E^{c}FG+EF^{c}G+EFG^{c}+EFG$\\
+	~\\
+	
+	{\bfseries 2.12}\\
+	\begin{proof}
+		由容斥恒等式可得，$P(E\cup F)=P(E)+P(F)-P(EF)$，即至少有一个事件发生的概率，再减去两件事件同时发生的概率P(EF)，即得到恰好只有一个发生的概率$P(E)+P(F)-2P(EF)$。
+	\end{proof}
+	
+	{\bfseries 2.19}\\
+	(\romannumeral1)若为有放回地取出，则满足负二项分布。\\
+	用X表示取球的总次数，每次取到红球的概率为$\frac{n}{m+n}$，由题意可知，此时X=k，取出红球r个，故$P\{X=k\}=\begin{pmatrix}
+		n-1\\r-1
+	\end{pmatrix}(\frac{n}{n+m})^{r}(\frac{m}{n+m})^{k-r}$。\\
+	(\romannumeral2)若为不放回地取球，设取球次数为i时，取出r个红球，则$r \le i\le m+n$，前i-1次取球取出r-1个红球。\\
+	故所求概率为$P=\frac{\begin{pmatrix}
+			k-1\\r-1
+	\end{pmatrix}}{\sum\limits_{i=r}^{n+m}\begin{pmatrix}
+	i-1\\r-1
+	\end{pmatrix}}$。\\
+
+	\chapter{第三章}
+
+\end{document}
